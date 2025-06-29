@@ -13,7 +13,7 @@ A user-friendly desktop application for bulk downloading Minecraft mods and thei
 *   **User-Friendly Interface:** A clean and intuitive GUI with download progress indicators.
 *   **Light & Dark Modes:** Includes a sleek, modern interface with a toggle for dark mode.
 *   **Standalone Executable:** No need to install Python or any libraries to run the application.
-*   **web search** if the api search fails it will use duckduckgo search engine to find the mod in cases the mod name is shortend or incorrect for example jei (just enough items)
+*   **web search** if the api search fails it will use duckduckgo search engine to find the mod in cases the mod name is shortend or incorrect for example jei (just enough items) it will be shown as (fallback)
 ## 🚀 Getting Started
 
 This is the easiest way to get started and **does not require Python** or any other programs to be installed.
