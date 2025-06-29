@@ -92,6 +92,11 @@ This list will download the following mods and their dependencies:
 *   **Performance:** Sodium, Lithium
 *   **Graphics:** Iris Shaders (for shader pack support)
 *   **Utilities:** Just Enough Items (recipe viewer), Xaero's Minimap (in-game map), Jade (shows what you are looking at), Traveler's Backpacks (wearable storage), Clumps (groups XP orbs together to reduce lag).
+## ❤️ Support the Project
+
+If you find CraftPacker helpful and want to support its development, please consider donating. Your support is greatly appreciated!
+
+[![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](https://www.paypal.com/donate/?business=4UZWFGSW6C478&no_recurring=0&item_name=Donate+to+helloworldx64&currency_code=USD )
 
 ## 🤝 Contributing
 
