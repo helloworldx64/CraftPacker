@@ -91,20 +91,6 @@ This list will download the following mods and their dependencies:
 *   **Graphics:** Iris Shaders (for shader pack support)
 *   **Utilities:** Just Enough Items (recipe viewer), Xaero's Minimap (in-game map), Jade (shows what you are looking at), Traveler's Backpacks (wearable storage), Clumps (groups XP orbs together to reduce lag).
 
-## 📦 Compiling into an Executable
-
-If you've made changes to the source code, you can easily re-compile it into a standalone `.exe` file using PyInstaller.
-
-1.  Make sure you have PyInstaller installed (`pip install pyinstaller`).
-2.  Place your desired icon file (e.g., `icon.ico`) in the project's root directory.
-3.  Run the following command in your terminal:
-
-    ```
-    pyinstaller --onefile --windowed --icon="icon.ico" craftpacker.py
-    ```
-
-4.  Your new executable will be located in the `dist` folder.
-
 ## 🤝 Contributing
 
 Contributions are welcome! If you have suggestions for improvements or find a bug, please feel free to:
