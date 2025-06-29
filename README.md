@@ -1,6 +1,7 @@
 # CraftPacker
 
 A user-friendly desktop application for bulk downloading Minecraft mods and their dependencies from Modrinth. Simply provide a list of mod names, and CraftPacker handles the rest, saving you time and effort when setting up new modpacks or updating existing ones.
+![image](https://github.com/user-attachments/assets/804444fc-2729-431f-9fdd-8f9dba97fcce)
 
 ## ✨ Key Features
 
@@ -12,19 +13,20 @@ A user-friendly desktop application for bulk downloading Minecraft mods and thei
 *   **User-Friendly Interface:** A clean and intuitive GUI with download progress indicators.
 *   **Light & Dark Modes:** Includes a sleek, modern interface with a toggle for dark mode.
 *   **Standalone Executable:** No need to install Python or any libraries to run the application.
-
+*   **web search** if the api search fails it will use duckduckgo search engine to find the mod in cases the mod name is shortend or incorrect for example jei (just enough items)
 ## 🚀 Getting Started
-
-There are two ways to use CraftPacker. For most people, the executable is the best choice.
-
-### For Users (Recommended Method)
 
 This is the easiest way to get started and **does not require Python** or any other programs to be installed.
 
 1.  Go to the [**Releases Page**](https://github.com/helloworldx64/CraftPacker/releases) on the right-hand side of this repository.
-2.  Download the latest `CraftPacker.exe` file from the "Assets" section.
-3.  Place the `.exe` file anywhere on your computer and run it. No installation is needed!
+2.  Download the latest `CraftPacker-vX.X.X.zip` file from the "Assets" section.
+3.  **Extract the .zip file** to a permanent location on your computer (like your Desktop or a new folder in Documents).
+4.  Open the new `CraftPacker` folder and run **`CraftPacker.exe`** from inside it.
 
+> [!IMPORTANT]
+> **Always extract the folder from the .zip file before running the application.**
+>
+> While you *can* run `CraftPacker.exe` directly from inside the zip file, this is not recommended. It can cause the application to run slowly and may prevent settings or other files from saving correctly. For the best experience, please extract the folder first.
 ### For Developers
 
 This method is for those who want to run the application from the source code, modify it, or contribute to the project.
