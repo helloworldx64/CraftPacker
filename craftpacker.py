@@ -7,13 +7,14 @@ import time
 from pathlib import Path
 import re
 import webbrowser
-import sv_ttk # --- NEW: Import the theme library
+import sv_ttk
 
 # --- Modrinth API Constants ---
 MODRINTH_API_BASE = "https://api.modrinth.com/v2"
 
-# --- GitHub URL Constant ---
+# --- Project URLs ---
 GITHUB_URL = "https://github.com/helloworldx64/CraftPacker"
+PAYPAL_URL = "https://www.paypal.com/donate/?business=4UZWFGSW6C478&no_recurring=0&item_name=Donate+to+helloworldx64&currency_code=USD"
 
 # --- Rate Limiter Class ---
 class RateLimiter:
@@ -24,7 +25,6 @@ class RateLimiter:
         self.last_call_time = 0
 
     def wait(self):
-        """Pauses execution if necessary to respect the rate limit."""
         with self.lock:
             elapsed = time.time() - self.last_call_time
             wait_time = self.min_interval - elapsed
@@ -33,7 +33,7 @@ class RateLimiter:
             self.last_call_time = time.time()
 
 # --- Main Application ---
-class ModrinthDownloaderApp:
+class CraftPackerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("CraftPacker")
@@ -46,7 +46,7 @@ class ModrinthDownloaderApp:
         self.resolving_popup = None
 
         self.setup_ui()
-        sv_ttk.set_theme("light") # --- NEW: Set the initial theme
+        sv_ttk.set_theme("light")
 
     def setup_ui(self):
         main_frame = ttk.Frame(self.root, padding="10")
@@ -66,15 +66,13 @@ class ModrinthDownloaderApp:
         loader_box = ttk.Combobox(settings_frame, textvariable=self.loader_var, values=["fabric", "forge", "neoforge", "quilt"], width=12, state="readonly")
         loader_box.grid(row=0, column=3, padx=5, sticky="w")
 
-        # --- NEW: Dark Mode Toggle ---
         self.dark_mode_var = tk.BooleanVar()
         dark_mode_check = ttk.Checkbutton(settings_frame, text="Dark Mode", variable=self.dark_mode_var, command=self.toggle_theme)
         dark_mode_check.grid(row=0, column=4, padx=10, sticky="e")
-        settings_frame.columnconfigure(4, weight=1) # Allow checkbox to align right
-        # -----------------------------
+        settings_frame.columnconfigure(4, weight=1)
 
         ttk.Label(settings_frame, text="Download To:").grid(row=1, column=0, padx=5, sticky="w")
-        self.dir_var = tk.StringVar(value=str(Path.home() / "Modrinth_Downloads"))
+        self.dir_var = tk.StringVar(value=str(Path.home() / "CraftPacker_Downloads"))
         dir_entry = ttk.Entry(settings_frame, textvariable=self.dir_var)
         dir_entry.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="ew")
         ttk.Button(settings_frame, text="Browse...", command=self.browse_dir).grid(row=1, column=4, padx=5, sticky="w")
@@ -136,32 +134,30 @@ class ModrinthDownloaderApp:
         self.status_label.pack(side="left")
 
         github_button = ttk.Button(status_bar_frame, text="View on GitHub", command=self.open_github)
-        github_button.pack(side="right", padx=2)
+        github_button.pack(side="right", padx=(2, 2))
+        paypal_button = ttk.Button(status_bar_frame, text="Donate", command=self.open_paypal)
+        paypal_button.pack(side="right", padx=(0, 2))
 
-    # --- NEW: Function to toggle the theme ---
     def toggle_theme(self):
-        """Switches between light and dark mode and updates widget colors."""
         if self.dark_mode_var.get():
             sv_ttk.set_theme("dark")
         else:
             sv_ttk.set_theme("light")
         self.update_widget_colors()
 
-    # --- NEW: Function to manually style non-ttk widgets ---
     def update_widget_colors(self):
-        """Updates the colors of widgets that are not styled by sv-ttk automatically."""
         style = ttk.Style()
-        # Get the current theme's background and foreground colors
         bg_color = style.lookup('TFrame', 'background')
         fg_color = style.lookup('TLabel', 'foreground')
-        # Apply colors to the tk.Text widget
         self.text_input.config(background=bg_color, foreground=fg_color)
     
     def open_github(self):
         webbrowser.open_new_tab(GITHUB_URL)
 
+    def open_paypal(self):
+        webbrowser.open_new_tab(PAYPAL_URL)
+    
     def show_resolving_popup(self):
-        # ... (This method is unchanged) ...
         self.resolving_popup = tk.Toplevel(self.root)
         self.resolving_popup.title("Working...")
         self.resolving_popup.transient(self.root)
@@ -177,28 +173,23 @@ class ModrinthDownloaderApp:
         self.resolving_popup.geometry(f"+{x}+{y}")
 
     def hide_resolving_popup(self):
-        # ... (This method is unchanged) ...
         if self.resolving_popup:
             self.resolving_popup.destroy()
             self.resolving_popup = None
 
     def toggle_buttons(self, enabled):
-        # ... (This method is unchanged) ...
         state = "normal" if enabled else "disabled"
         for btn in self.action_buttons:
             btn.config(state=state)
 
     def update_status_bar(self, text):
-        # ... (This method is unchanged) ...
         self.root.after(0, lambda: self.status_label.config(text=text))
 
     def browse_dir(self):
-        # ... (This method is unchanged) ...
         directory = filedialog.askdirectory(title="Select Download Directory")
         if directory: self.dir_var.set(directory)
 
     def import_mods_from_folder(self):
-        # ... (This method is unchanged) ...
         folder_path = filedialog.askdirectory(title="Select Folder to Import Mods From")
         if not folder_path: return
         mod_names = set()
@@ -225,7 +216,6 @@ class ModrinthDownloaderApp:
             messagebox.showwarning("Import Failed", "No .jar files found.")
 
     def start_search_thread(self):
-        # ... (This method is unchanged) ...
         mod_names = [line.strip() for line in self.text_input.get("1.0", "end").splitlines() if line.strip()]
         if not mod_names:
             messagebox.showwarning("Input Missing", "Please enter or import mod names.")
@@ -236,7 +226,6 @@ class ModrinthDownloaderApp:
         self._start_search_for(mod_names)
 
     def start_research_not_found_thread(self):
-        # ... (This method is unchanged) ...
         not_found_items = self.not_found_tree.get_children()
         if not not_found_items:
             messagebox.showinfo("Information", "The 'Not Found' list is empty.")
@@ -247,14 +236,12 @@ class ModrinthDownloaderApp:
         self._start_search_for(mod_names_to_research)
 
     def _start_search_for(self, mod_names):
-        # ... (This method is unchanged) ...
         self.total_searched = len(mod_names)
         thread = threading.Thread(target=self.search_worker_manager, args=(mod_names,))
         thread.daemon = True
         thread.start()
 
     def search_worker_manager(self, mod_names):
-        # ... (This method is unchanged) ...
         threads = []
         loader, version = self.loader_var.get(), self.version_entry.get()
         for name in mod_names:
@@ -264,19 +251,16 @@ class ModrinthDownloaderApp:
             threads.append(t)
         for t in threads:
             t.join()
-        
         found_count = len(self.tree.get_children()) - len([i for i in self.tree.get_children() if self.tree.item(i)['values'][0].startswith('Dependency')])
         self.update_status_bar(f"Search complete. Found {found_count} of {self.total_searched} mods.")
 
     def find_one_mod_worker(self, name, loader, version):
-        # ... (This method is unchanged) ...
         self.update_status_bar(f"Searching for '{name}' (API)...")
         result = self._fetch_mod_data_from_search(name, loader, version)
         if result:
             self.results[name] = result
             self.root.after(0, self.add_to_found_list, name, result, "Available (API)", ('found',))
             return
-        
         cleaned_name = re.sub(r'\d+$', '', name)
         if cleaned_name != name:
             self.update_status_bar(f"Searching for '{cleaned_name}' (API)...")
@@ -285,7 +269,6 @@ class ModrinthDownloaderApp:
                 self.results[name] = result
                 self.root.after(0, self.add_to_found_list, name, result, "Available (API)", ('found',))
                 return
-
         self.update_status_bar(f"Searching for '{name}' (Fallback)...")
         result = self._search_modrinth_fallback(name, loader, version)
         if result:
@@ -295,24 +278,20 @@ class ModrinthDownloaderApp:
             self.root.after(0, self.add_to_not_found_list, name)
 
     def add_to_found_list(self, original_name, result, status_prefix, tags):
-        # ... (This method is unchanged) ...
         version_type = result.get('version_type', 'release')
         final_status = f"{status_prefix} ({version_type})"
         self.tree.insert("", "end", iid=original_name, values=(result['name'], final_status, ""), tags=tags)
 
     def add_to_not_found_list(self, mod_name):
-        # ... (This method is unchanged) ...
         self.not_found_tree.insert("", "end", text=mod_name)
 
     def _generate_potential_slugs(self, mod_name):
-        # ... (This method is unchanged) ...
         name_no_version = re.sub(r'\d+$', '', mod_name)
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1-\2', name_no_version)
         base_slug = re.sub('([a-z0-9])([A-Z])', r'\1-\2', s1).lower().replace(" ", "-")
         return [base_slug, base_slug + "-fabric", base_slug + "-forge"]
 
     def _fetch_mod_data_from_search(self, query, loader, game_version):
-        # ... (This method is unchanged) ...
         try:
             self.rate_limiter.wait()
             params = {"query": query, "limit": 5, "facets": f'[["project_type:mod"]]'}
@@ -328,14 +307,12 @@ class ModrinthDownloaderApp:
             return None
 
     def _search_modrinth_fallback(self, mod_name, loader, game_version):
-        # ... (This method is unchanged) ...
         for slug in self._generate_potential_slugs(mod_name):
             mod_info = self._fetch_mod_data_from_slug(slug, loader, game_version)
             if mod_info: return mod_info
         return None
 
     def _fetch_mod_data_from_slug(self, slug, loader, game_version):
-        # ... (This method is unchanged) ...
         try:
             self.rate_limiter.wait()
             proj_url = f"{MODRINTH_API_BASE}/project/{slug}"
@@ -346,7 +323,6 @@ class ModrinthDownloaderApp:
             return None
     
     def get_mod_info(self, project_id, loader, game_version):
-        # ... (This method is unchanged) ...
         try:
             self.rate_limiter.wait()
             proj_url = f"{MODRINTH_API_BASE}/project/{project_id}"
@@ -369,38 +345,30 @@ class ModrinthDownloaderApp:
             return None
 
     def start_download_selected_thread(self):
-        # ... (This method is unchanged) ...
         selected_items = self.tree.selection()
         if not selected_items: messagebox.showwarning("No Selection", "Please select mods to download.")
         else: self._initiate_downloads(selected_items)
 
     def start_download_all_thread(self):
-        # ... (This method is unchanged) ...
         all_item_ids = self.tree.get_children()
         if not all_item_ids: messagebox.showwarning("Nothing to Download", "No mods are available.")
         else: self._initiate_downloads(all_item_ids)
 
     def _initiate_downloads(self, item_ids):
-        # ... (This method is unchanged) ...
         dest_folder = Path(self.dir_var.get())
         dest_folder.mkdir(parents=True, exist_ok=True)
         self.downloading_set.clear()
-        
         self.toggle_buttons(False)
         self.show_resolving_popup()
         self.update_status_bar("Resolving dependencies...")
-
         mods_to_download = [self.results[item_id] for item_id in item_ids if item_id in self.results]
-        
         thread = threading.Thread(target=self.resolve_and_download_all, args=(mods_to_download, dest_folder))
         thread.daemon = True
         thread.start()
 
     def resolve_and_download_all(self, initial_mods, dest_folder):
-        # ... (This method is unchanged) ...
         download_queue = []
         seen_projects = set()
-        
         def resolve(mod_info):
             if mod_info['project_id'] in seen_projects: return
             seen_projects.add(mod_info['project_id'])
@@ -410,18 +378,14 @@ class ModrinthDownloaderApp:
                     dep_info = self.get_mod_info(dep['project_id'], self.loader_var.get(), self.version_entry.get())
                     if dep_info: resolve(dep_info)
             download_queue.append(mod_info)
-
         for mod in initial_mods:
             resolve(mod)
-
         self.root.after(0, self.hide_resolving_popup)
-
         if not download_queue:
             self.root.after(0, lambda: messagebox.showinfo("Complete", "No new mods or dependencies to download."))
             self.root.after(0, self.toggle_buttons, True)
             self.update_status_bar("Ready")
             return
-
         total_downloads = len(download_queue)
         download_threads = []
         for i, mod_to_download in enumerate(download_queue):
@@ -431,23 +395,18 @@ class ModrinthDownloaderApp:
                 dl_thread = threading.Thread(target=self.download_mod, args=(mod_to_download, dest_folder))
                 dl_thread.daemon = True
                 download_threads.append(dl_thread)
-
         for thread in download_threads:
             thread.start()
             thread.join()
-
         self.root.after(0, self.toggle_buttons, True)
         self.update_status_bar("All downloads completed.")
 
     def download_mod(self, mod_data, dest_folder):
-        # ... (This method is unchanged) ...
         iid = next((k for k, v in self.results.items() if v and v['project_id'] == mod_data['project_id']), mod_data['name'])
         if not self.tree.exists(iid):
             status = f"Dependency ({mod_data.get('version_type', 'release')})"
             self.root.after(0, lambda: self.tree.insert("", "end", iid=iid, values=(mod_data['name'], status, ""), tags=('dependency',)))
-        
         self.root.after(0, self.update_download_progress, iid, 0)
-        
         url, filename = mod_data['download_url'], mod_data['filename']
         filepath = dest_folder / filename
         try:
@@ -465,7 +424,6 @@ class ModrinthDownloaderApp:
                             progress = int((downloaded_size / total_size) * 100)
                             self.root.after(0, self.update_download_progress, iid, progress)
                             last_update_time = current_time
-            
             self.root.after(0, self.update_download_progress, iid, 100)
         except Exception as e:
             error_message = str(e)
@@ -479,7 +437,6 @@ class ModrinthDownloaderApp:
                     pass
 
     def update_download_progress(self, iid, progress):
-        # ... (This method is unchanged) ...
         if self.tree.exists(iid):
             current_values = list(self.tree.item(iid, 'values'))
             current_values[2] = f"{progress}%"
@@ -489,7 +446,6 @@ class ModrinthDownloaderApp:
             self.tree.item(iid, values=tuple(current_values), tags=tuple(tags))
 
     def update_download_error(self, iid, error_message):
-        # ... (This method is unchanged) ...
         if self.tree.exists(iid):
             current_values = list(self.tree.item(iid, 'values'))
             current_values[1] = "Error"
@@ -499,5 +455,6 @@ class ModrinthDownloaderApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    app = ModrinthDownloaderApp(root)
+    app = CraftPackerApp(root)
     root.mainloop()
+
