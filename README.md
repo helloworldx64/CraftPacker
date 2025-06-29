@@ -15,7 +15,7 @@ A user-friendly desktop application for bulk downloading Minecraft mods and thei
 
 ## 🚀 Getting Started
 
-There are two ways to use CraftPacker. For most people, the standalone executable is the best choice.
+There are two ways to use CraftPacker. For most people, the executable is the best choice.
 
 ### For Users (Recommended Method)
 
