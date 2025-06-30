@@ -14,6 +14,9 @@ add_executable(CraftPacker
     CraftPacker.cpp
 )
 
+# This line tells the linker to create a Windows GUI application.
+set_property(TARGET CraftPacker PROPERTY WIN32_EXECUTABLE TRUE)
+
 target_link_libraries(CraftPacker PRIVATE
     Qt6::Core
     Qt6::Gui
