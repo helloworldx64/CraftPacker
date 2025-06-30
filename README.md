@@ -4,8 +4,9 @@ A fast, native desktop application for bulk downloading Minecraft mods and their
 
 This project is a complete rewrite of the original Python version in C++/Qt for maximum performance and a truly standalone experience.
 
-![CraftPacker Screenshot](https://github.com/user-attachments/assets/804444fc-2729-431f-9fdd-8f9dba97fcce)
-!need to switch this gif 
+
+https://github.com/user-attachments/assets/1cb2c2ec-1c82-4622-891c-47620447b0fa
+
 ## ✨ Key Features
 
 *   **Native Performance:** Built with C++ and the Qt framework for a fast and responsive experience.
